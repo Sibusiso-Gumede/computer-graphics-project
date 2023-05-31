@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset = "UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Simple Village</title>
+    <style>
+        body {
+            margin: 0
+        }
+    </style>
+</head>
+<body>
+    <button id="StartButton">Start Rotation</button>
+    <button id="StopButton">Stop Rotation</button>
+    <button id="DirectionButton">Change Rotation Direction</button>
+    <div>
+        speed 0 <input id="increaseSpeedSlider" type="range"
+        min="0" max="100" step="10" value="50" /> 100 
+    </div>
+    <div>
+        zoom 0 <input id="zoomSlider" type="range"
+        min="0" max="100" step="10" value="50" /> 100 
+    </div>
+	<script type="module" src="/run_script.js"></script>
+</body>
+</html>
