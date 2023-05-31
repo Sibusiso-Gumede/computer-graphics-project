@@ -2,7 +2,7 @@
 A simple village: a university project developed using WebGL and ThreeJS which is part of my final year computer graphics module.
 
 ## Table of Contents
-  Tech Stack
+  Tech Stack\n
   Program Modules
   Module Dependencies
 
