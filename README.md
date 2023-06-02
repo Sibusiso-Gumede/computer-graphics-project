@@ -5,6 +5,7 @@ A simple village: a university project developed using WebGL and ThreeJS which i
   Tech Stack  
   Module Dependencies  
   Program Modules  
+  How to Run the Program
 
 ## Tech Stack
   Node.js (npm tool for managing packages like vite)  
