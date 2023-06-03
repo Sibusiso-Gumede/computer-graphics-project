@@ -26,5 +26,11 @@ A simple village: a university project developed using WebGL and ThreeJS which i
 |subroutines2 |Contains functions used in the run_script module.                  |  
 
 ## How to Run the Program?
-Open the index.html file and the browser will run the script. The WebGL engine, which is part of almost every browser,   
-will then render the scene.
+Since ES6 modules work via HTTP(s) protocol and not via file:// protocol,  
+you've two options:
+1)  Install a development web server tool by typing,  
+    $ npm install vite  
+    and  
+    $ npx vite (to initialise the web server)
+    on your cli.
+2)  Or run chrome using the --allow-file-access-from-files flag.
