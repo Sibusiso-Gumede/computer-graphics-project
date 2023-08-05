@@ -27,9 +27,9 @@ export function AddBarn(scene){
 
     // join the vertices of the 2D shape using line segments.
     shape.moveTo(vertices[0].x, vertices[0].y);
-    for(var i=1; i<vertices.length; i++){
+    for(var i=1; i<vertices.length; i++)
         shape.lineTo(vertices[i].x, vertices[i].y);
-    }
+    
     shape.lineTo(vertices[0].x, vertices[0].y);
 
     // properties of the shape.
@@ -53,14 +53,12 @@ export function AddTrees(scene){
     function arrayRange(start, finish, step){
         var array = [];
         if(step>0){    
-            for(var i=start; i<=finish; i+=step){
+            for(var i=start; i<=finish; i+=step)
                 array.push(i);
-            }
         }
         else if(step<0){
-            for(var j=start; j>=finish; j-=step){
+            for(var j=start; j>=finish; j-=step)
                 array.push(i);
-            }
         }
         return array;
     }

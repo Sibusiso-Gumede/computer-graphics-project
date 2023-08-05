@@ -27,13 +27,37 @@ export function initAndRetEnvironment(){
     var startRotationButton = document.getElementById("StartButton");
     var stopRotationButton = document.getElementById("StopButton");
     var toggleRotationButton = document.getElementById("DirectionButton");
+    var speedSlider = document.getElementById("increaseSpeedSlider");
+    var buttonInput = document.getElementById("btn");
+    
     startRotationButton.addEventListener("click", function(){
         orbit.autoRotate = true;
     });
+
     stopRotationButton.addEventListener("click", function(){
         orbit.autoRotate = false;
     });
 
+    toggleRotationButton.addEventListener("click", function(){
+        if(orbit.autoRotateSpeed > 0)
+            orbit.autoRotateSpeed = -1;
+        else if(orbit.autoRotateSpeed < 0)
+            orbit.autoRotateSpeed = 1;
+    });
+
+    if (buttonInput.addEventListener) 
+        buttonInput.addEventListener("click", testtest, false);
+
+    else if (buttonInput.attachEvent) 
+        buttonInput.attachEvent('onclick', testtest);
+
+    function testtest(e) {
+        var value = speedSlider.value;
+        if (value > 0 && value < 5)
+            alert("First");
+        else
+            alert("Second");
+    }
 
     const axesHelper = new THREE.AxesHelper(5);
     scene.add(axesHelper);
