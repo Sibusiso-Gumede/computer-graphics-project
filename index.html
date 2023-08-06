@@ -16,11 +16,11 @@
     <button id="DirectionButton">Change Rotation Direction</button>
     <div>
         speed 0 <input id="increaseSpeedSlider" type="range"
-        min="0" max="100" step="10" value="50" /> 100 
+        min="0" max="100" step="10" value="50" onchange="rangevalue.value=value"/> 100
     </div>
     <div>
         zoom 0 <input id="zoomSlider" type="range"
-        min="0" max="100" step="10" value="50" /> 100 
+        min="0" max="100" step="10" value="50" onchange="rangevalue.value=value"/> 100 
     </div>
 	<script type="module" src="/run_script.js"></script>
 </body>

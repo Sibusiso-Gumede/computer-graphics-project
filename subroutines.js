@@ -28,8 +28,7 @@ export function initAndRetEnvironment(){
     var stopRotationButton = document.getElementById("StopButton");
     var toggleRotationButton = document.getElementById("DirectionButton");
     var speedSlider = document.getElementById("increaseSpeedSlider");
-    var buttonInput = document.getElementById("btn");
-    
+        
     startRotationButton.addEventListener("click", function(){
         orbit.autoRotate = true;
     });
@@ -45,19 +44,14 @@ export function initAndRetEnvironment(){
             orbit.autoRotateSpeed = 1;
     });
 
-    if (buttonInput.addEventListener) 
-        buttonInput.addEventListener("click", testtest, false);
-
-    else if (buttonInput.attachEvent) 
-        buttonInput.attachEvent('onclick', testtest);
-
-    function testtest(e) {
-        var value = speedSlider.value;
-        if (value > 0 && value < 5)
-            alert("First");
-        else
-            alert("Second");
+    let rangeValues = {
+        50:1, 40:-1, 60:2, 30:-2, 70:3, 20:-3, 80:4, 10:-4, 
+        90:5, 0:-5, 100:6
     }
+
+    speedSlider.addEventListener("mouseup", function(){
+        orbit.autoRotateSpeed = rangeValues[speedSlider.value];
+    });
 
     const axesHelper = new THREE.AxesHelper(5);
     scene.add(axesHelper);
@@ -140,9 +134,4 @@ export function AddPond(scene){
     scene.add(pond2);
     scene.add(algae);
     scene.add(algae2);
-}
-
-// the program controls.
-function optionControls(){
-    
 }
