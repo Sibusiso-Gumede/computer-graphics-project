@@ -3,22 +3,25 @@ import {rotateObject} from './subroutines.js';
 import {seededRandom} from 'three/src/math/MathUtils.js';
 
 export function AddBarn(scene){
-    // the barn...
+    // The barn...
     const barnDepth = 8;
-    // walls.
+    const barnWallsTexture = new THREE.TextureLoader().load('./assets/wood.jpg');
+    // Walls.
     const wallsGeometry = new THREE.BoxGeometry(5, 5.20, barnDepth);
-    const wallsMaterial = new THREE.MeshBasicMaterial({
-        color: 0x746552
+    const wallsMaterial = new THREE.MeshStandardMaterial({
+        //color: 0x746552,
+        map: barnWallsTexture
     });
 
     const supportingWalls = new THREE.Mesh(wallsGeometry, wallsMaterial);
     supportingWalls.position.set(8, 2.70, -6);
+    supportingWalls.castShadow = true;
     scene.add(supportingWalls);
 
-    // the roof.
-    // vertices of a 2D triangle.
+    // The roof.
+    // Vertices of a 2D triangle.
     var A = new THREE.Vector2(0, 0);
-    var B = new THREE.Vector2(7, -0.40);
+    var B = new THREE.Vector2(7, 0.0);
     var C = new THREE.Vector2(3.50, 4);
 
     var vertices = [A, B, C];
@@ -32,24 +35,33 @@ export function AddBarn(scene){
     
     shape.lineTo(vertices[0].x, vertices[0].y);
 
-    // properties of the shape.
+    // Properties of the shape.
     const settings = {
     depth: barnDepth,
-    bevelEnabled: false
+    bevelEnabled: true
     }
 
-    // create a 3D geometry from the 2D triangle.
+    //TO FIX: roof texture mapping
+    // Create a 3D geometry from the 2D triangle.
     const roofGeometry = new THREE.ExtrudeGeometry(shape, settings);
-    const roofMaterial = new THREE.MeshBasicMaterial({color: 0xcc0000});
+    const barnRoofTexture = new THREE.TextureLoader().load('./assets/roof.jpg');
+    barnRoofTexture.wrapS = THREE.RepeatWrapping;
+    barnRoofTexture.wrapT = THREE.RepeatWrapping;
+    barnRoofTexture.repeat.set(1, 1);
+    const roofMaterial = new THREE.MeshStandardMaterial({
+        //color: 0xcc0000,
+        map: barnRoofTexture    
+    });
     const roof = new THREE.Mesh(roofGeometry, roofMaterial);
-    roof.position.set(4.35, 5.20, -10);
+    roof.position.set(4.35, 5.00, -10);
+    roof.castShadow = true;
     scene.add(roof);
 }
 
-// trees.
+// Trees.
 export function AddTrees(scene){
 
-    // generate an array of values.
+    // Generate an array of values.
     function arrayRange(start, finish, step){
         var array = [];
         if(step>0){    
@@ -184,4 +196,26 @@ export function AddTrees(scene){
     // populate tree3.
     populateTrunk(trunk3);
     populateBranchLeaf(branchLeaf3);
+}
+
+export function dayScene(env){
+
+    const ambientLight = new THREE.AmbientLight(0xffffff,0.25);
+    const sun = new THREE.DirectionalLight(0xffffff, 0.8);
+    
+    sun.position.set(-30, 25, 0);
+    sun.castShadow = true;
+    sun.shadow.camera.top = 12;
+    sun.shadow.camera.left = -12;
+    sun.shadow.camera.right = 12;
+    
+    const dLightHelper = new THREE.DirectionalLightHelper(sun, 5);
+    const dLightShadowHelper = new THREE.CameraHelper(sun.shadow.camera);
+
+    var daySceneObjects = new THREE.Group();
+    daySceneObjects.add(ambientLight);
+    daySceneObjects.add(sun);
+    daySceneObjects.add(dLightHelper);
+
+    return daySceneObjects.add(dLightShadowHelper);
 }

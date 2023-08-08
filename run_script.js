@@ -1,31 +1,44 @@
 import {
     initAndRetEnvironment,
-    AddVillageGround,
-    AddWaterTank,
-    AddPond
+    addVillageGround,
+    addWaterTank,
+    addPond,
+    nightScene
 } from './subroutines.js';
 import {
-    AddBarn,
-    AddTrees
+    addBarn,
+    addTrees,
+    dayScene
 } from './subroutines2.js';
 
 // create environment.
 var environment = initAndRetEnvironment();
 
+document.addEventListener("keydown", function(event){
+    var key = event.key;
+    if(key == "D" || key == "d")
+        dayScene(environment.scene);
+    else if(key == "N" || key == "n")
+        nightScene(environment.scene);
+});
+
 // add the ground to the scene.
-AddVillageGround(environment.scene);
+addVillageGround(environment.scene);
 
 // add the water tank.
-AddWaterTank(environment.scene);
+addWaterTank(environment.scene);
 
 // add the barn.
-AddBarn(environment.scene);
+addBarn(environment.scene);
 
 // add the trees.
-AddTrees(environment.scene);
+addTrees(environment.scene);
 
 // add the water pond.
-AddPond(environment.scene);
+addPond(environment.scene);
+
+// The night scene is initial state of the environment.
+
 
 // program controls.
 // toggle start/stop of shape rotation button...
