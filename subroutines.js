@@ -66,10 +66,19 @@ export function initAndRetEnvironment(){
     
     // Scene mode. D for day. N for night.
     var mode = 'N';
-    // add light sources.
-    var lights = defaultLightSettings();
 
-    scene.add(lights);
+    // add light sources.
+    scene.add(defaultLightSettings());
+
+    const lightSourceGeometry = new THREE.SphereGeometry(3);
+    const lightSourceTexture = new THREE.TextureLoader().load("./assets/moon.jpg");
+    const lightSourceMaterial = new THREE.MeshBasicMaterial({
+        map: lightSourceTexture});
+    const lightSource = new THREE.Mesh(lightSourceGeometry, lightSourceMaterial);
+    lightSource.position.set(-30, 25, 0);
+    lightSource.name = "lightSource";
+
+    scene.add(lightSource);
 
     return new Object({scene, camera, renderer, orbit, mode});
 }
@@ -77,9 +86,8 @@ export function initAndRetEnvironment(){
 export function addVillageGround(scene){
     // The village ground...
     const groundGeometry = new THREE.PlaneGeometry(30, 30);
-    const groundTexture = new THREE.TextureLoader().load('./assets/grass.jpg');
+    const groundTexture = new THREE.TextureLoader().load('./assets/lawn2.jpg');
     const groundMaterial = new THREE.MeshStandardMaterial({
-        //color: 0xc79c4d,
         side: THREE.DoubleSide,
         map: groundTexture
     });
@@ -96,10 +104,7 @@ export function addWaterTank(scene){
     waterTankTexture.wrapS = THREE.RepeatWrapping;
     waterTankTexture.wrapT = THREE.RepeatWrapping;
     waterTankTexture.repeat.set(5, 1);
-    const waterTankMaterial = new THREE.MeshStandardMaterial({
-        //color: 0x2EB82E,
-        map: waterTankTexture
-    });
+    const waterTankMaterial = new THREE.MeshStandardMaterial({map: waterTankTexture});
     const waterTank = new THREE.Mesh(waterTankGeometry, waterTankMaterial);
     waterTank.position.set(-6, 5, -6);
     waterTank.castShadow = true;
@@ -107,10 +112,7 @@ export function addWaterTank(scene){
 
     // The support structure of the water tank.
     const supportGeometry = new THREE.BoxGeometry(6, 3, 6);
-    const supportMaterial = new THREE.MeshStandardMaterial({
-        color: 0x99999a
-        //map: 
-    });
+    const supportMaterial = new THREE.MeshStandardMaterial({color: 0x99999a});
     const supportStructure = new THREE.Mesh(supportGeometry, supportMaterial);
     supportStructure.position.set(-6, 1.55, -6);
     supportStructure.castShadow = true;
@@ -134,9 +136,7 @@ export function addPond(scene){
     const algaeGeometry = new THREE.CircleGeometry(pondRadius*0.125);
     const algaeGeometry2 = new THREE.CircleGeometry(pondRadius*0.25);
     const pondMaterial = new THREE.MeshStandardMaterial({
-        //color:0x5f87d7,
-        map: pondTexture
-    });
+        map: pondTexture});
     
     // add some algae for realistic effects.
     const algaeMaterial = new THREE.MeshBasicMaterial({color:0x007f00});
@@ -161,20 +161,25 @@ export function addPond(scene){
     scene.add(algae2);
 }
 
-export function nightScene(lightSettings){
-    lightSettings.getObjectByProperty("type", THREE.AmbientLight).intensity = 0.00;
-    lightSettings.getObjectByProperty("type", THREE.DirectionalLight).intensity = 0.20;
-    return 'N'
-
+export function nightScene(scene){
+    changeLightSource(scene, "./assets/moon.jpg");
+    scene.getObjectByName("lightObjects").getObjectByName("ambientLight").intensity = 0.00;
+    scene.getObjectByName("lightObjects").getObjectByName("dLight").intensity = 0.0125;
+    
+    scene.getObjectByName("lightObjects").getObjectByName("posLight1").intensity = 0.0032;
+    scene.getObjectByName("lightObjects").getObjectByName("posLight2").intensity = 0.0032;
+    scene.getObjectByName("lightObjects").getObjectByName("posLight3").intensity = 0.0032;
+    
+    return 'N';
 }
 
 export function defaultLightSettings(){
     const ambientLight = new THREE.AmbientLight(0xffffff, 0.00);
     ambientLight.name = "ambientLight";
-    const dLight = new THREE.DirectionalLight(0xffffff, 0.20);
+    const dLight = new THREE.DirectionalLight(0xffffff, 0.0125);
     dLight.name = "dLight";
     
-    dLight.position.set(-30, 25, 0);
+    dLight.position.set(-25, 25, 0);
     dLight.castShadow = true;
     dLight.shadow.camera.top = 12;
     dLight.shadow.camera.left = -12;
@@ -183,12 +188,61 @@ export function defaultLightSettings(){
     const dLightHelper = new THREE.DirectionalLightHelper(dLight, 5);
     const dLightShadowHelper = new THREE.CameraHelper(dLight.shadow.camera);
     
-    var lightObjects = new THREE.Group();
+    const lightObjects = new THREE.Group();
     lightObjects.name = "lightObjects";
     lightObjects.add(ambientLight);
     lightObjects.add(dLight);
     lightObjects.add(dLightHelper);
     lightObjects.add(dLightShadowHelper);
+
+    const posLight1 = new THREE.DirectionalLight(0xffffff, 0.0032);
+    const posLight2 = new THREE.DirectionalLight(0xffffff, 0.0032);
+    const posLight3 = new THREE.DirectionalLight(0xffffff, 0.0032);
+
+    posLight1.name = "posLight1";
+    posLight2.name = "posLight2";
+    posLight3.name = "posLight3";
+    
+    posLight1.position.set(0, 1, 0);
+    posLight2.position.set(-12, 1, 12);
+    posLight3.position.set(12, 1, 12);
+
+    posLight1.castShadow = true;
+    posLight2.castShadow = true;
+    posLight3.castShadow = true;
+
+    posLight1.shadow.camera.top = 2;
+    posLight1.shadow.camera.bottom = 2;
+    posLight1.shadow.camera.left = -2;
+    posLight1.shadow.camera.right = 2;
+
+    posLight2.shadow.camera.top = 2;
+    posLight2.shadow.camera.bottom = 2;
+    posLight2.shadow.camera.left = -2;
+    posLight2.shadow.camera.right = 2;
+
+    posLight3.shadow.camera.top = 2;
+    posLight3.shadow.camera.bottom = 2;
+    posLight3.shadow.camera.left = -2;
+    posLight3.shadow.camera.right = 2;
+
+    const p1LightHelper = new THREE.DirectionalLightHelper(posLight1, 1);
+    const p2LightHelper = new THREE.DirectionalLightHelper(posLight2, 1);
+    const p3LightHelper = new THREE.DirectionalLightHelper(posLight3, 1);
+
+    lightObjects.add(posLight1);
+    lightObjects.add(posLight2);
+    lightObjects.add(posLight3);
+    lightObjects.add(p1LightHelper);
+    lightObjects.add(p2LightHelper);
+    lightObjects.add(p3LightHelper);
     
     return lightObjects;
+}
+
+export function changeLightSource(scene, textureMap){
+    const sourceTexture = new THREE.TextureLoader().load(textureMap);
+    const sourceMaterial = new THREE.MeshBasicMaterial({
+        map: sourceTexture});
+    scene.getObjectByName("lightSource").material = sourceMaterial;
 }

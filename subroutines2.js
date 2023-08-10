@@ -1,17 +1,16 @@
 import * as THREE from 'three';
-import {rotateObject} from './subroutines.js';
-import {seededRandom} from 'three/src/math/MathUtils.js';
+import {rotateObject,
+        changeLightSource
+} 
+from './subroutines.js';
 
 export function addBarn(scene){
     // The barn...
     const barnDepth = 8;
-    const barnWallsTexture = new THREE.TextureLoader().load('./assets/wood.jpg');
+    const barnWallsTexture = new THREE.TextureLoader().load('./assets/barn.jpg');
     // Walls.
     const wallsGeometry = new THREE.BoxGeometry(5, 5.20, barnDepth);
-    const wallsMaterial = new THREE.MeshStandardMaterial({
-        //color: 0x746552,
-        map: barnWallsTexture
-    });
+    const wallsMaterial = new THREE.MeshStandardMaterial({map: barnWallsTexture});
 
     const supportingWalls = new THREE.Mesh(wallsGeometry, wallsMaterial);
     supportingWalls.position.set(8, 2.70, -6);
@@ -41,17 +40,13 @@ export function addBarn(scene){
     bevelEnabled: true
     };
 
-    //TO FIX: roof texture mapping
     // Create a 3D geometry from the 2D triangle.
     const roofGeometry = new THREE.ExtrudeGeometry(shape, settings);
     const barnRoofTexture = new THREE.TextureLoader().load('./assets/roof.jpg');
     barnRoofTexture.wrapS = THREE.RepeatWrapping;
     barnRoofTexture.wrapT = THREE.RepeatWrapping;
     barnRoofTexture.repeat.set(1, 1);
-    const roofMaterial = new THREE.MeshStandardMaterial({
-        //color: 0xcc0000,
-        map: barnRoofTexture    
-    });
+    const roofMaterial = new THREE.MeshStandardMaterial({map: barnRoofTexture});
     const roof = new THREE.Mesh(roofGeometry, roofMaterial);
     roof.position.set(4.35, 5.00, -10);
     roof.castShadow = true;
@@ -60,7 +55,6 @@ export function addBarn(scene){
 
 // Trees.
 export function addTrees(scene){
-
     // Generate an array of values.
     function arrayRange(start, finish, step){
         var array = [];
@@ -89,10 +83,13 @@ export function addTrees(scene){
             ts.trunkBottomRadius,
             ts.trunkHeight
         )
-        const trunkMaterial = new THREE.MeshBasicMaterial({color: 0x48372d});
+        const trunkTexture = new THREE.TextureLoader().load("./assets/tree-trunk.jpg");
+        const trunkMaterial = new THREE.MeshStandardMaterial({
+            map: trunkTexture});
         const trunk = new THREE.Mesh(trunkGeometry, trunkMaterial);
         // translate object.
         trunk.position.set(ts.translateX, ts.translateY, ts.translateZ);
+        trunk.castShadow = true;
         scene.add(trunk);
     }
 
@@ -111,6 +108,7 @@ export function addTrees(scene){
         const branchMaterial = new THREE.MeshBasicMaterial({color:0x00ff00});
         for(var i=1; i<=60; i++){    
             const branch = new THREE.Mesh(branchGeometry, branchMaterial);
+            branch.castShadow = true;
             branch.position.set(getRandomValue(bs.dimensionXBound), 
             getRandomValue(bs.dimensionYBound), getRandomValue(bs.dimensionZBound));
             
@@ -200,8 +198,37 @@ export function addTrees(scene){
     populateBranchLeaf(branchLeaf3);
 }
 
-export function dayScene(lightSettings){
-    lightSettings.getObjectByProperty("type", THREE.AmbientLight).intensity = 0.25;
-    lightSettings.getObjectByProperty("type", THREE.DirectionalLight).intensity = 0.80;
-    return 'D'
+export function dayScene(scene){
+    changeLightSource(scene, "./assets/sun.jpg");
+    
+    scene.getObjectByName("lightObjects").getObjectByName("ambientLight").intensity = 0.25;
+    scene.getObjectByName("lightObjects").getObjectByName("dLight").intensity = 0.80;
+
+    scene.getObjectByName("lightObjects").getObjectByName("posLight1").intensity = 0.00;
+    scene.getObjectByName("lightObjects").getObjectByName("posLight2").intensity = 0.00;
+    scene.getObjectByName("lightObjects").getObjectByName("posLight3").intensity = 0.00;
+
+    return 'D';
+}
+
+export function addGardenLights(scene){
+    const light1Geometry = new THREE.CylinderGeometry(0.5, 0.5);
+    const light2Geometry = new THREE.CylinderGeometry(0.5, 0.5);
+    const light3Geometry = new THREE.CylinderGeometry(0.5, 0.5);
+
+    const light1Material = new THREE.MeshStandardMaterial({color: 0x85A3FF});
+    const light2Material = new THREE.MeshStandardMaterial({color: 0x85A3FF});
+    const light3Material = new THREE.MeshStandardMaterial({color: 0x85A3FF});
+
+    const light1 = new THREE.Mesh(light1Geometry, light1Material);
+    const light2 = new THREE.Mesh(light2Geometry, light2Material);
+    const light3 = new THREE.Mesh(light3Geometry, light3Material);
+
+    light1.position.set(0, 0.4, 0);
+    light2.position.set(-12, 0.4, 12);
+    light3.position.set(12, 0.4, 12);
+
+    scene.add(light1);
+    scene.add(light2);
+    scene.add(light3);
 }
