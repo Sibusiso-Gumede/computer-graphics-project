@@ -17,16 +17,14 @@ var environment = initAndRetEnvironment();
 
 document.addEventListener("keydown", function(event){
     // Change the light settings group.
-    var key = event.keyCode;
-    if((key == 68 || key == ) && 
+    event.key;
+    if((event.key == "D" || event.key == "d") && 
             (environment.mode == 'N')){
-        dayScene(environment.scene.getObjectByProperty("type",
-        THREE.Group));
+        environment.mode = dayScene(environment.scene.getObjectByName("lightObjects"));
     }
-    else if((key == "N" || key == "n") && 
+    else if((event.key == "N" || event.key == "n") && 
             (environment.mode == 'D')){
-        nightScene(environment.scene.getObjectByProperty("type",
-        THREE.Group));
+        environment.mode = nightScene(environment.scene.getObjectByName("type", THREE.Group));
     }    
 });
 

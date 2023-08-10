@@ -164,11 +164,15 @@ export function addPond(scene){
 export function nightScene(lightSettings){
     lightSettings.getObjectByProperty("type", THREE.AmbientLight).intensity = 0.00;
     lightSettings.getObjectByProperty("type", THREE.DirectionalLight).intensity = 0.20;
+    return 'N'
+
 }
 
 export function defaultLightSettings(){
     const ambientLight = new THREE.AmbientLight(0xffffff, 0.00);
+    ambientLight.name = "ambientLight";
     const dLight = new THREE.DirectionalLight(0xffffff, 0.20);
+    dLight.name = "dLight";
     
     dLight.position.set(-30, 25, 0);
     dLight.castShadow = true;
@@ -180,6 +184,7 @@ export function defaultLightSettings(){
     const dLightShadowHelper = new THREE.CameraHelper(dLight.shadow.camera);
     
     var lightObjects = new THREE.Group();
+    lightObjects.name = "lightObjects";
     lightObjects.add(ambientLight);
     lightObjects.add(dLight);
     lightObjects.add(dLightHelper);

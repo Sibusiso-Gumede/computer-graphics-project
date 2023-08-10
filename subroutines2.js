@@ -203,4 +203,5 @@ export function addTrees(scene){
 export function dayScene(lightSettings){
     lightSettings.getObjectByProperty("type", THREE.AmbientLight).intensity = 0.25;
     lightSettings.getObjectByProperty("type", THREE.DirectionalLight).intensity = 0.80;
+    return 'D'
 }
