@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import {rotateObject} from './subroutines.js';
 import {seededRandom} from 'three/src/math/MathUtils.js';
 
-export function AddBarn(scene){
+export function addBarn(scene){
     // The barn...
     const barnDepth = 8;
     const barnWallsTexture = new THREE.TextureLoader().load('./assets/wood.jpg');
@@ -39,7 +39,7 @@ export function AddBarn(scene){
     const settings = {
     depth: barnDepth,
     bevelEnabled: true
-    }
+    };
 
     //TO FIX: roof texture mapping
     // Create a 3D geometry from the 2D triangle.
@@ -59,7 +59,7 @@ export function AddBarn(scene){
 }
 
 // Trees.
-export function AddTrees(scene){
+export function addTrees(scene){
 
     // Generate an array of values.
     function arrayRange(start, finish, step){
@@ -138,16 +138,17 @@ export function AddTrees(scene){
         trunkHeight: 6,
         translateX: -6,
         translateY: 3.10,
-        translateZ: 6,
-    }
+        translateZ: 6
+    };
+
     // branches/leafs1.
     const branchLeaf1 = {
-        branchRadius: 0.2,
+        branchRadius: 0.20,
         branchLength: 0.75,
         dimensionXBound: arrayRange(-8, -4, 0.25),
         dimensionYBound: arrayRange(4, 7, 0.25),
-        dimensionZBound: arrayRange(4, 8, 0.25),
-    }
+        dimensionZBound: arrayRange(4, 8, 0.25)
+    };
     
     // populate tree1.
     populateTrunk(trunk1);
@@ -160,16 +161,17 @@ export function AddTrees(scene){
         trunkHeight: 6*(2/3),
         translateX: -3,
         translateY: 3.10*(2/3),
-        translateZ: 12,
-    }
+        translateZ: 12
+    };
+
     // branches/leafs2.
     const branchLeaf2 = {
         branchRadius: 0.1,
         branchLength: 0.50,
         dimensionXBound: arrayRange(-4, -1, 0.25),
         dimensionYBound: arrayRange(3, 5, 0.25),
-        dimensionZBound: arrayRange(11, 13, 0.25),
-    }
+        dimensionZBound: arrayRange(11, 13, 0.25)
+    };
 
     // populate tree2.
     populateTrunk(trunk2);
@@ -182,40 +184,23 @@ export function AddTrees(scene){
         trunkHeight: 6*(3/4),
         translateX: -9,
         translateY: 3.10*(3/4),
-        translateZ: 10,
-    }
+        translateZ: 10
+    };
 
     const branchLeaf3 = {
         branchRadius: 0.1,
         branchLength: 0.50,
         dimensionXBound: arrayRange(-10, -8, 0.25),
         dimensionYBound: arrayRange(3, 5, 0.25),
-        dimensionZBound: arrayRange(9, 11, 0.25),
-    }
+        dimensionZBound: arrayRange(9, 11, 0.25)
+    };
 
     // populate tree3.
     populateTrunk(trunk3);
     populateBranchLeaf(branchLeaf3);
 }
 
-export function dayScene(env){
-
-    const ambientLight = new THREE.AmbientLight(0xffffff,0.25);
-    const sun = new THREE.DirectionalLight(0xffffff, 0.8);
-    
-    sun.position.set(-30, 25, 0);
-    sun.castShadow = true;
-    sun.shadow.camera.top = 12;
-    sun.shadow.camera.left = -12;
-    sun.shadow.camera.right = 12;
-    
-    const dLightHelper = new THREE.DirectionalLightHelper(sun, 5);
-    const dLightShadowHelper = new THREE.CameraHelper(sun.shadow.camera);
-
-    var daySceneObjects = new THREE.Group();
-    daySceneObjects.add(ambientLight);
-    daySceneObjects.add(sun);
-    daySceneObjects.add(dLightHelper);
-
-    return daySceneObjects.add(dLightShadowHelper);
+export function dayScene(lightSettings){
+    lightSettings.getObjectByProperty("type", THREE.AmbientLight).intensity = 0.25;
+    lightSettings.getObjectByProperty("type", THREE.DirectionalLight).intensity = 0.80;
 }

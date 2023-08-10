@@ -63,8 +63,15 @@ export function initAndRetEnvironment(){
     speedSlider.addEventListener("mouseup", function(){
         orbit.autoRotateSpeed = rangeValues[speedSlider.value];
     });
+    
+    // Scene mode. D for day. N for night.
+    var mode = 'N';
+    // add light sources.
+    var lights = defaultLightSettings();
 
-    return new Object({scene, camera, renderer, orbit});
+    scene.add(lights);
+
+    return new Object({scene, camera, renderer, orbit, mode});
 }
 
 export function addVillageGround(scene){
@@ -100,8 +107,9 @@ export function addWaterTank(scene){
 
     // The support structure of the water tank.
     const supportGeometry = new THREE.BoxGeometry(6, 3, 6);
-    const supportMaterial = new THREE.MeshBasicMaterial({
+    const supportMaterial = new THREE.MeshStandardMaterial({
         color: 0x99999a
+        //map: 
     });
     const supportStructure = new THREE.Mesh(supportGeometry, supportMaterial);
     supportStructure.position.set(-6, 1.55, -6);
@@ -146,16 +154,36 @@ export function addPond(scene){
     pond2.rotation.x = -0.5 * Math.PI;
     algae.rotation.x = -0.5 * Math.PI;
     algae2.rotation.x = -0.5 * Math.PI;
-
+    
     scene.add(pond1);
     scene.add(pond2);
     scene.add(algae);
     scene.add(algae2);
 }
 
-export function nightScene(env){
+export function nightScene(lightSettings){
+    lightSettings.getObjectByProperty("type", THREE.AmbientLight).intensity = 0.00;
+    lightSettings.getObjectByProperty("type", THREE.DirectionalLight).intensity = 0.20;
+}
 
+export function defaultLightSettings(){
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.00);
+    const dLight = new THREE.DirectionalLight(0xffffff, 0.20);
     
-
-
+    dLight.position.set(-30, 25, 0);
+    dLight.castShadow = true;
+    dLight.shadow.camera.top = 12;
+    dLight.shadow.camera.left = -12;
+    dLight.shadow.camera.right = 12;
+    
+    const dLightHelper = new THREE.DirectionalLightHelper(dLight, 5);
+    const dLightShadowHelper = new THREE.CameraHelper(dLight.shadow.camera);
+    
+    var lightObjects = new THREE.Group();
+    lightObjects.add(ambientLight);
+    lightObjects.add(dLight);
+    lightObjects.add(dLightHelper);
+    lightObjects.add(dLightShadowHelper);
+    
+    return lightObjects;
 }

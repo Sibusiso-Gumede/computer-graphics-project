@@ -3,23 +3,31 @@ import {
     addVillageGround,
     addWaterTank,
     addPond,
-    nightScene
+    nightScene,
 } from './subroutines.js';
 import {
     addBarn,
     addTrees,
     dayScene
 } from './subroutines2.js';
+import * as THREE from 'three';
 
 // create environment.
 var environment = initAndRetEnvironment();
 
 document.addEventListener("keydown", function(event){
-    var key = event.key;
-    if(key == "D" || key == "d")
-        dayScene(environment.scene);
-    else if(key == "N" || key == "n")
-        nightScene(environment.scene);
+    // Change the light settings group.
+    var key = event.keyCode;
+    if((key == 68 || key == ) && 
+            (environment.mode == 'N')){
+        dayScene(environment.scene.getObjectByProperty("type",
+        THREE.Group));
+    }
+    else if((key == "N" || key == "n") && 
+            (environment.mode == 'D')){
+        nightScene(environment.scene.getObjectByProperty("type",
+        THREE.Group));
+    }    
 });
 
 // add the ground to the scene.
@@ -36,9 +44,6 @@ addTrees(environment.scene);
 
 // add the water pond.
 addPond(environment.scene);
-
-// The night scene is initial state of the environment.
-
 
 // program controls.
 // toggle start/stop of shape rotation button...
