@@ -3,6 +3,20 @@ import {rotateObject,
         changeLightSource
 } 
 from './subroutines.js';
+import {GLTFLoader} from 'three/examples/jsm/loaders/GLTFLoader.js';
+
+const model = new Promise((res, rej) => {
+    const loader = new GLTFLoader();
+    loader.load("./assets/acacia-tree.fbx", function(object){
+        object.traverse(function (child) {
+            if(child.isMesh){
+                child.castShadow = true;
+                child.receiveShadow = true;
+            }
+        });
+        res(object);
+    });
+})
 
 export function addBarn(scene){
     // The barn...
